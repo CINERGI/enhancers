@@ -56,9 +56,9 @@ function textFile () {
         callback(null, 'done');
       })
     }
-  ], function (err, res) {
+  ], function (err) {
     if (err) throw err;
-    console.log('Successfully mappeed', argv.file, 'to', argv.out);
+    console.log('Successfully mapped', argv.file, 'to', argv.out);
   })
 }
 
