@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
-var yargs = require('yargs')
-  , async = require('async')
+var async = require('async')
   , lib = require('./lib')
   ;
 
 // Command line parameters
-var args = yargs.usage('Command line utility for mapping iso to cinergi json')
+var yargs = require('yargs')
+  .usage('Command line utility for mapping iso to cinergi json')
 
   .alias('f', 'file')
   .describe('f', 'convert iso data in a text file to cinergi json')
 
   .alias('o', 'out')
-  .describe('')
+  .describe('o', 'output text file to write transformed data to')
 
   .alias('s', 'stdout')
   .describe()
@@ -22,13 +22,14 @@ var args = yargs.usage('Command line utility for mapping iso to cinergi json')
 
   .alias('r', 'rest')
   .describe('r', 'rest server to receive iso data and return cinergi json')
+  ;
 
-  .argv;
+console.log(yargs.help());
 
 var queue = [];
-if (argv.file) queue.push(textFile);
-if (argv.json) queue.push(jsonString);
-if (argv.rest) queue.push(restServer);
+if (yargs.file) queue.push(textFile);
+if (yargs.json) queue.push(jsonString);
+if (yargs.rest) queue.push(restServer);
 
 function textFile () {
   async.waterfall([
