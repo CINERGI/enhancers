@@ -1,7 +1,7 @@
 var path = require('path')
-  , async = require('async')
   , fs = require('fs')
-  , lib = require('../lib')
+  , exec = require('child_process').exec
+  , index = require('../index.js')
   ;
 
 describe('Map ISO to CINERGI', function () {
@@ -11,42 +11,25 @@ describe('Map ISO to CINERGI', function () {
       , outJson = path.join(__dirname, 'sample-out.json')
       ;
 
-    async.waterfall([
-      function (callback) {
-        lib.read(testXml, function (err, data) {
-          if (err) throw err;
-          callback(null, data);
-        })
-      },
-      function (data, callback) {
-        lib.jsonOrXml(data, function (err, data) {
-          if (err) throw err;
-          callback(null, data);
-        })
-      },
-      function (iso, callback) {
-        lib.mapIsoToCinergi(iso, function (err, data) {
-          if (err) throw err;
-          callback(null, data);
-        })
-      },
-      function (cinergi, callback) {
-        lib.write(outJson, cinergi, function (err) {
-          if (err) throw err;
-          callback(null, 'done');
-        })
-      }
-    ], function (err) {
+    index.text(testXml, outJson, function (err, res) {
       if (err) throw err;
-      fs.unlink(outJson, function (err) {
+      fs.unlink(res.output, function (err) {
         if (err) throw err;
         done();
-      });
+      })
     })
   });
 
-  it('should read a text stream, transform and stream it out', function () {
+  it('should read a text stream, transform and stream it out', function (done) {
+    var testXml = path.join(__dirname, 'sample-iso.xml')
+      , cmd = 'cat ' + testXml + ' | iso-to-cinergi -s'
+      ;
 
+    exec(cmd , function (err, stdout, stderr) {
+        if (err) throw err;
+        if (stderr) throw stderr;
+        done();
+      })
   });
 
 });
