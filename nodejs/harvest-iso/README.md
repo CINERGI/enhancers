@@ -24,7 +24,7 @@ $ mocha test
 ```
 
 #### Usage
-Once installed, the command-line kung-fu can be done via `iso-to-cinergi`:
+Once installed, command-line kung-fu can be done via `iso-to-cinergi`:
 ```
 $ iso-to-cinergi --help
 
