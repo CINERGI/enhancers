@@ -45,4 +45,8 @@ describe('Map ISO to CINERGI', function () {
     })
   });
 
+  it('should read a text stream, transform and stream it out', function () {
+
+  });
+
 });
