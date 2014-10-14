@@ -32,8 +32,8 @@ if (program.rest) queue.push(rest);
 async.series(queue);
 
 function text (input, output, callback) {
-  input = input ? input : argv.file;
-  output = output ? output : argv.out;
+  input = input ? input : program.file;
+  output = output ? output : program.out;
   async.waterfall([
     function (callback) {
       lib.read(input, function (err, data) {
