@@ -7,8 +7,8 @@ var program = require('commander')
 
 program
   .version('0.0.1')
-  .option('-f, --file', 'convert iso data in a text file to cinergi json')
-  .option('-o, --out', 'output text file to write transformed data to')
+  .option('-f, --file [value]', 'convert iso data in a text file to cinergi json')
+  .option('-o, --out [value]', 'output text file to write transformed data to')
   .option('-s, --stream', 'perform transformation on a stream of text')
   ;
 
@@ -32,8 +32,12 @@ if (program.rest) queue.push(rest);
 async.series(queue);
 
 function text (input, output, callback) {
-  input = input ? input : program.file;
-  output = output ? output : program.out;
+  if (!input || typeof input === 'function') {
+    input = program.file;
+  }
+  if (!output || typeof output === 'function') {
+    output = program.out;
+  }
   async.waterfall([
     function (callback) {
       lib.read(input, function (err, data) {
