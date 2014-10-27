@@ -22,7 +22,7 @@ describe('Map Hydro10 ISO to CINERGI', function () {
 
   it('should read a text stream, transform, stream it out', function (done) {
     var testXml = path.join(__dirname, 'sample-hydro10-iso.xml')
-      , cmd = 'cat ' + testXml + ' | iso-to-cinergi -s -h'
+      , cmd = 'cat ' + testXml + ' | xml-to-cinergi -s -h'
       ;
 
     exec(cmd , function (err, stdout, stderr) {
@@ -52,7 +52,7 @@ describe('Map CZO ISO to CINERGI', function () {
 
   it('should read a text stream, transform, stream it out', function (done) {
     var testXml = path.join(__dirname, 'sample-czo-iso.xml')
-      , cmd = 'cat ' + testXml + ' | iso-to-cinergi -s -c'
+      , cmd = 'cat ' + testXml + ' | xml-to-cinergi -s -c'
       ;
 
     exec(cmd, function (err, stdout, stderr) {
