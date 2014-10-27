@@ -1,132 +1,11 @@
-/****************
-* Local Methods *
-*****************/
-function Helpers () {}
+var helpers = require('./helpers');
 
-Helpers.prototype.serviceTypes = [
-    'OGC:WMS'
-  , 'OGC:WFS'
-  , 'OGC:WCS'
-  , 'esri'
-  , 'opendap'
-];
-
-Helpers.prototype.capServiceTypes = function () {
-  var types
-    , type
-    , caps
-    , i
-    ;
-
-  caps = [];
-  types = this.serviceTypes;
-
-  for (i = 0; i < types.length; i++) {
-    type = types[i];
-    caps.push(type.toUpperCase());
-  }
-
-  return caps;
-};
-
-Helpers.prototype.objGet = function (obj, prop, defVal) {
-  var props
-    , count
-    , i
-    , p;
-
-  if (!obj) return defVal;
-
-  props = prop.split('.');
-  count = 0;
-
-  for (i = 0; i < props.length; i++) {
-    p = props[i];
-    if (obj[p]) {
-      obj = obj[p];
-      count++;
-      if (count === props.length) {
-        return obj;
-      }
-    } else {
-      return defVal;
-    }
-  }
-};
-
-Helpers.prototype.setProperty = function (obj, prop, value) {
-  var count
-    , p
-    , props
-    , i
-    , results
-    ;
-
-  props = prop.split('.');
-  count = 0;
-  results = [];
-
-  for (i = 0; i < props.length; i ++) {
-    p = props[i];
-    if (obj[p]) {
-      obj = obj[p];
-      results.push(count++);
-    } else {
-      if (count + 1 === props.length) {
-        results.push(obj[p] = value);
-      } else {
-        obj[p] = {};
-        obj = obj[p];
-        results.push(count++);
-      }
-    }
-  }
-  return results;
-};
-
-Helpers.prototype.guessServiceType = function (url) {
-  var condition
-    , conditions
-    , conditionSet
-    , i
-    , j
-    , satisfied
-    , types
-    , type
-    ;
-
-  types = this.serviceTypes;
-  conditions = [
-      [/getcapabilities/i, /wms/i]
-    , [/getcapabilities/i, /wfs/i]
-    , [/getcapabilities/i, /wcs/i]
-    , [/\/services\//i, /\/mapserver\/?$/i]
-    , [/\.dds$/]
-  ];
-
-  for (i = 0; i < types.length; i++) {
-    type = types[i];
-    conditionSet = conditions[i];
-    satisfied = true;
-    for (j = 0; j < conditionSet.length; j++) {
-      condition = conditionSet[j];
-      if (!url.match(condition)) satisfied = false;
-    }
-    if (satisfied) return type;
-  }
-  return null;
-};
-
-/*****************
-* Module Methods *
-******************/
 function isoMap (input, callback) {
   var doc
     , mdDesc
     , mdGeoExt
     , mdProps
     , iso
-    , capServiceTypes
     , ident
     , extent
     , validExtents
@@ -145,18 +24,18 @@ function isoMap (input, callback) {
     , citationId
     , distributions
     , moreLinks
-    , helpers
     , objGet
     , setProperty
     , guessServiceType
+    , capServiceTypes
     , i
     , j
     ;
 
-  helpers = new Helpers();
-  guessServiceType = helpers.guessServiceType();
-  objGet = helpers.objGet();
-  setProperty = helpers.setProperty();
+  guessServiceType = helpers.guessServiceType;
+  capServiceTypes = helpers.capServiceTypes;
+  objGet = helpers.objGet;
+  setProperty = helpers.setProperty;
 
   iso = input;
 
@@ -399,7 +278,6 @@ function czoMap (input, callback) {
     , mdGeoExt
     , mdProps
     , iso
-    , capServiceTypes
     , ident
     , extent
     , validExtents
@@ -418,18 +296,18 @@ function czoMap (input, callback) {
     , citationId
     , distributions
     , moreLinks
-    , helpers
     , objGet
     , setProperty
     , guessServiceType
+    , capServiceTypes
     , i
     , j
     ;
 
-  helpers = new Helpers();
-  guessServiceType = helpers.guessServiceType();
-  objGet = helpers.objGet();
-  setProperty = helpers.setProperty();
+  guessServiceType = helpers.guessServiceType;
+  capServiceTypes = helpers.capServiceTypes;
+  objGet = helpers.objGet;
+  setProperty = helpers.setProperty;
 
   iso = input;
 

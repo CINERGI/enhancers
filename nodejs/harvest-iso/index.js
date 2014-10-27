@@ -3,14 +3,17 @@
 var program = require('commander')
   , async = require('async')
   , lib = require('./lib')
+  , transform = require('./lib/transform')
   ;
 
 program
   .version('0.0.1')
-  .option('-f, --file [value]', 'convert iso data in a text file to cinergi json')
-  .option('-o, --out [value]', 'output text file to write transformed data to')
-  .option('-s, --stream', 'perform transformation on a stream of text')
-  ;
+  .option('-i, --input [value]', 'Text file containing data to be transformed')
+  .option('-o, --output [value]', 'Text file to write transformed data out to')
+  .option('-s, --stream', 'Operate on a stream of text')
+  .option('-h, --hydro10', 'Use transformation method for Hydro10 metadata')
+  .option('-c, --czo', 'Use transformation method for CZO metadata')
+;
 
 program.on('--help', function () {
   console.log(' Examples:');
@@ -25,19 +28,37 @@ program.on('--help', function () {
 
 program.parse(process.argv);
 
+var algorithm;
+if (program.hydro10) algorithm = transform.isoMap;
+if (program.czo) algorithm = transform.czoMap;
+
 var queue = [];
-if (program.file && program.out) queue.push(text);
+if (program.input && program.output) queue.push(text);
 if (program.stream) queue.push(stream);
 if (program.rest) queue.push(rest);
 async.series(queue);
 
-function text (input, output, callback) {
+function text (input, output, method, callback) {
   if (!input || typeof input === 'function') {
-    input = program.file;
+    input = program.input;
   }
   if (!output || typeof output === 'function') {
-    output = program.out;
+    output = program.output;
   }
+  if (!method || typeof method === 'function') {
+    method = algorithm;
+  }
+  if (method) {
+    switch (method) {
+      case 'hydro10':
+        method = transform.isoMap;
+        break;
+      case 'czo':
+        method = transform.czoMap;
+        break;
+    }
+  }
+
   async.waterfall([
     function (callback) {
       lib.read(input, function (err, data) {
@@ -52,7 +73,7 @@ function text (input, output, callback) {
       })
     },
     function (iso, callback) {
-      lib.map(iso, function (err, data) {
+      method(iso, function (err, data) {
         if (err) throw err;
         callback(null, data);
       })
@@ -91,7 +112,7 @@ function stream () {
         })
       },
       function (iso, callback) {
-        lib.map(iso, function (err, data) {
+        algorithm(iso, function (err, data) {
           if (err) throw err;
           var json = JSON.stringify(data);
           callback(null, json);
