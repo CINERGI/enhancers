@@ -58,7 +58,6 @@ function text (input, output, method, callback) {
         break;
     }
   }
-
   async.waterfall([
     function (callback) {
       lib.read(input, function (err, data) {
