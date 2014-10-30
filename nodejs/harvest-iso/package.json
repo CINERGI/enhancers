@@ -24,6 +24,6 @@
   "homepage": "https://github.com/CINERGI/enhancers",
   "preferGlobal": "true",
   "bin": {
-    "iso-to-cinergi": "index.js"
+    "xml-to-cinergi": "index.js"
   }
 }

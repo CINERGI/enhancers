@@ -24,24 +24,24 @@ $ mocha test
 ```
 
 #### Usage
-Once installed, command-line kung-fu can be done via `iso-to-cinergi`:
+Once installed, command-line kung-fu can be done via `xml-to-cinergi`:
 ```
-$ iso-to-cinergi --help
+$ xml-to-cinergi --help
 
-  Usage: iso-to-cinergi [options]
+  Usage: xml-to-cinergi [options]
   
   Options:
-    -h, --help      output the usage information
-    -V, --version   output the version number
-    -f, --file      convert iso data in a text file to cinergi json
-    -o, --out       output text file to write transformed data to
-    -s, --stream    perform transformation on a stream of text
+    -i, --input [value]   Text file containing data to be transformed
+    -o, --output [value]  Text file to write transformed data out to
+    -s, --stream          Operate on a stream of text
+    -h, --hydro10         Use transformation method for Hydro10 metadata
+    -c, --czo             Use transformation method for CZO metadata
 
   Examples:
 
     Operate on text files --
-    $ iso-to-cinergi -f input.xml -o output.json
+    $ xml-to-cinergi -i test/sample-hydro10-iso.xml -o output.json -h
 
-    Operate on streams and UNIX pipes --
-    $ cat iso.xml | iso-to-cinergi -s
+    Operate on streams and Bash pipes --
+    $ cat test/sample-czo-iso.xml | iso-to-cinergi -s -c 
 ```
